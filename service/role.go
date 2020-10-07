@@ -13,7 +13,7 @@ type RoleService struct {
 
 func (t *RoleService) GetRoles(c *gin.Context) ([]*dto.RoleDTO, error) {
 	var roles []*model.Role
-	if err := db.Session.Preload("Users").Find(&roles).Error; err != nil {
+	if err := db.DB.Preload("Users").Find(&roles).Error; err != nil {
 		return nil, errors.New("undefined error")
 	}
 

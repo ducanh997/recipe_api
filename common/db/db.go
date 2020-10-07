@@ -8,19 +8,19 @@ import (
 	"recipe_api/model"
 )
 
-var Session *gorm.DB
+var DB *gorm.DB
 
 func ConnectionString(user string, pass string, host string, port string, db string) string {
 	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", user, pass, host, port, db)
 }
 
 func Migrate() error {
-	return Session.AutoMigrate(&model.User{}, &model.Role{}, &model.Post{})
+	return DB.AutoMigrate(&model.User{}, &model.Role{}, &model.Post{})
 }
 
 func Open() error {
 	var err error
-	Session, err = gorm.Open(
+	DB, err = gorm.Open(
 		mysql.Open(
 			ConnectionString(
 				os.Getenv("DB_USER"),

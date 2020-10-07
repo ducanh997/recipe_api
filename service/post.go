@@ -13,7 +13,7 @@ type PostService struct {
 
 func (t *PostService) GetPosts(c *gin.Context) ([]*dto.PostDTO, error) {
 	var posts []*model.Post
-	if err := db.Session.Preload("User").Find(&posts).Error; err != nil {
+	if err := db.DB.Preload("User").Find(&posts).Error; err != nil {
 		return nil, errors.New("undefined error")
 	}
 

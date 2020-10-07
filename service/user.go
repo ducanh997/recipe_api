@@ -15,7 +15,7 @@ type UserService struct {
 
 func (t *UserService) CreateUser(c *gin.Context, userDTO *dto.UserDTO) (*dto.UserDTO, error) {
 	role := &model.Role{}
-	if err := db.Session.First(&role, model.Role{Name: common.PStr("Member")}).Error; err != nil {
+	if err := db.DB.First(&role, model.Role{Name: common.PStr("Member")}).Error; err != nil {
 		return nil, errors.New("undefined error")
 	}
 
@@ -26,7 +26,7 @@ func (t *UserService) CreateUser(c *gin.Context, userDTO *dto.UserDTO) (*dto.Use
 		Roles:     []*model.Role{role},
 	}
 
-	if err := db.Session.Create(user).Error; err != nil {
+	if err := db.DB.Create(user).Error; err != nil {
 		return nil, errors.New("undefined error")
 	}
 	return dto.NewUserDTO(user), nil
@@ -34,7 +34,7 @@ func (t *UserService) CreateUser(c *gin.Context, userDTO *dto.UserDTO) (*dto.Use
 
 func (t *UserService) UpdateUser(c *gin.Context, userID string, userDTO *dto.UserDTO) (*dto.UserDTO, error) {
 	user := &model.User{}
-	if err := db.Session.First(&user, userID).Error; err != nil {
+	if err := db.DB.First(&user, userID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("user not found")
 		}
@@ -45,7 +45,7 @@ func (t *UserService) UpdateUser(c *gin.Context, userID string, userDTO *dto.Use
 	user.AvatarURL = userDTO.AvatarURL
 	user.Email = userDTO.Email
 
-	if err := db.Session.Save(&user).Error; err != nil {
+	if err := db.DB.Save(&user).Error; err != nil {
 		return nil, errors.New("undefined error")
 	}
 	return userDTO, nil
@@ -57,7 +57,7 @@ func (t *UserService) GetUsers(c *gin.Context, searchDTO *dto.UserSearchDTO) ([]
 	}
 
 	var users []*model.User
-	query := db.Session.Debug().Preload("Roles")
+	query := db.DB.Debug().Preload("Roles")
 
 	if searchDTO.Email != nil {
 		query = query.Where(model.User{Email: searchDTO.Email})
