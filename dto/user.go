@@ -32,4 +32,5 @@ type UserSearchDTO struct {
 	AgeTo    *int
 	PageNum  int
 	PageSize int
+	RoleName *string
 }

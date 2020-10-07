@@ -57,7 +57,12 @@ func (t *UserService) GetUsers(c *gin.Context, searchDTO *dto.UserSearchDTO) ([]
 	}
 
 	var users []*model.User
-	query := db.DB.Debug().Preload("Roles")
+	query := db.DB.Debug().Preload("Roles", func(db *gorm.DB) *gorm.DB {
+		if searchDTO.RoleName != nil {
+			return db.Where(model.Role{Name: searchDTO.RoleName})
+		}
+		return db
+	})
 
 	if searchDTO.Email != nil {
 		query = query.Where(model.User{Email: searchDTO.Email})
