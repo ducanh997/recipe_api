@@ -26,4 +26,6 @@ func NewUserDTO(user *model.User) *UserDTO {
 type UserSearchDTO struct {
 	Username *string
 	Email    *string
+	PageNum  int
+	PageSize int
 }

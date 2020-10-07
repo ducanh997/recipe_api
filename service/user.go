@@ -67,6 +67,7 @@ func (t *UserService) GetUsers(c *gin.Context, searchDTO *dto.UserSearchDTO) ([]
 	}
 
 	query = query.Order("ID desc")
+	query.Scopes(db.Paginate(searchDTO.PageNum, searchDTO.PageSize))
 
 	if err := query.Find(&users).Error; err != nil {
 		return nil, errors.New("undefined error")
