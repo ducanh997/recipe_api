@@ -6,6 +6,7 @@ type UserDTO struct {
 	Username  *string
 	Email     *string
 	AvatarURL *string
+	Age       *int
 	ID        uint
 	RoleDTOs  []*RoleDTO
 }
@@ -20,12 +21,15 @@ func NewUserDTO(user *model.User) *UserDTO {
 		Email:    user.Email,
 		ID:       user.ID,
 		RoleDTOs: roleDTOs,
+		Age:      user.Age,
 	}
 }
 
 type UserSearchDTO struct {
 	Username *string
 	Email    *string
+	AgeFrom  *int
+	AgeTo    *int
 	PageNum  int
 	PageSize int
 }

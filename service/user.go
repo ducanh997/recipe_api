@@ -65,6 +65,12 @@ func (t *UserService) GetUsers(c *gin.Context, searchDTO *dto.UserSearchDTO) ([]
 	if searchDTO.Username != nil {
 		query = query.Where(model.User{Username: searchDTO.Username})
 	}
+	if searchDTO.AgeFrom != nil {
+		query = query.Where("age >= ?", searchDTO.AgeFrom)
+	}
+	if searchDTO.AgeTo != nil {
+		query = query.Where("age <= ?", searchDTO.AgeTo)
+	}
 
 	query = query.Order("ID desc")
 	query.Scopes(db.Paginate(searchDTO.PageNum, searchDTO.PageSize))
