@@ -34,6 +34,7 @@ func main() {
 		{
 			user.GET("/", userController.GetUsers)
 			user.POST("/", userController.CreateUser)
+			user.GET("/:userID", userController.GetUserByID)
 			user.PUT("/:userID", userController.UpdateUser)
 		}
 		role := api.Group("/roles")

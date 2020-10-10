@@ -13,6 +13,17 @@ import (
 type UserService struct {
 }
 
+func (t *UserService) GetUserByID(c *gin.Context, ID string) (*dto.UserDTO, error) {
+	user := &model.User{}
+	if err := db.DB.First(user, ID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("user not found")
+		}
+		return nil, errors.New("undefined error")
+	}
+	return dto.NewUserDTO(user), nil
+}
+
 func (t *UserService) CreateUser(c *gin.Context, userDTO *dto.UserDTO) (*dto.UserDTO, error) {
 	role := &model.Role{}
 	if err := db.DB.First(&role, model.Role{Name: common.PStr("Member")}).Error; err != nil {
