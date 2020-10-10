@@ -4,6 +4,7 @@ import "recipe_api/model"
 
 type PostDTO struct {
 	Title   *string
+	Content *string
 	UserID  *uint
 	UserDTO *UserDTO
 }
@@ -15,6 +16,7 @@ func NewPostDTO(post *model.Post) *PostDTO {
 	return &PostDTO{
 		Title:   post.Title,
 		UserID:  post.UserID,
+		Content: post.Content,
 		UserDTO: NewUserDTO(post.User),
 	}
 }
