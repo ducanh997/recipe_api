@@ -28,3 +28,8 @@ func InitPostController() *PostController {
 	postController := NewPostController(postService)
 	return postController
 }
+
+func InitAuthController() *AuthController {
+	authController := NewAuthController()
+	return authController
+}

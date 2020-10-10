@@ -28,13 +28,22 @@ func main() {
 	roleController := controller.InitRoleController()
 	postController := controller.InitPostController()
 
-	api := router.Group("/api")
+	api := router.Group("/api/v1")
 	{
-		api.GET("/users", userController.GetUsers).
-			POST("/users", userController.CreateUser).
-			GET("/roles", roleController.GetRoles).
-			GET("/posts", postController.GetPosts).
-			PUT("/users/:userID", userController.UpdateUser)
+		user := api.Group("/users")
+		{
+			user.GET("/", userController.GetUsers)
+			user.POST("/", userController.CreateUser)
+			user.PUT("/:userID", userController.UpdateUser)
+		}
+		role := api.Group("/roles")
+		{
+			role.GET("/", roleController.GetRoles)
+		}
+		post := api.Group("/posts")
+		{
+			post.GET("/", postController.GetPosts)
+		}
 	}
 
 	router.Run()

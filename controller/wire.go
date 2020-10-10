@@ -36,3 +36,10 @@ func InitPostController() *PostController {
 
 	return &PostController{}
 }
+
+func InitAuthController() *AuthController {
+	wire.Build(
+		NewAuthController,
+	)
+	return &AuthController{}
+}
