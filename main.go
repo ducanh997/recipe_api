@@ -44,6 +44,7 @@ func main() {
 		post := api.Group("/posts")
 		{
 			post.GET("/", postController.GetPosts)
+			post.GET("/:postID", postController.GetPostByID)
 		}
 	}
 

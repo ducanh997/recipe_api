@@ -9,6 +9,9 @@ type PostDTO struct {
 }
 
 func NewPostDTO(post *model.Post) *PostDTO {
+	if post == nil {
+		return nil
+	}
 	return &PostDTO{
 		Title:   post.Title,
 		UserID:  post.UserID,

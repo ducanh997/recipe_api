@@ -11,6 +11,9 @@ type RoleDTO struct {
 }
 
 func NewRoleDTO(role *model.Role) *RoleDTO {
+	if role == nil {
+		return nil
+	}
 	userDTOs := make([]*UserDTO, 0)
 	for _, user := range role.Users {
 		userDTOs = append(userDTOs, NewUserDTO(user))

@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"recipe_api/common/db"
 	"recipe_api/dto"
 	"recipe_api/model"
@@ -22,6 +23,17 @@ func (t *PostService) GetPosts(c *gin.Context) ([]*dto.PostDTO, error) {
 		postDTOs = append(postDTOs, dto.NewPostDTO(post))
 	}
 	return postDTOs, nil
+}
+
+func (t *PostService) GetPostByID(c *gin.Context, ID string) (*dto.PostDTO, error) {
+	post := &model.Post{}
+	if err := db.DB.First(&post, ID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("post not found")
+		}
+		return nil, errors.New("undefined error")
+	}
+	return dto.NewPostDTO(post), nil
 }
 
 func NewPostService() *PostService {

@@ -8,6 +8,7 @@ import (
 
 type PostService interface {
 	GetPosts(c *gin.Context) ([]*dto.PostDTO, error)
+	GetPostByID(c *gin.Context, ID string) (*dto.PostDTO, error)
 }
 
 type PostController struct {
@@ -21,6 +22,16 @@ func (t *PostController) GetPosts(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, postDTOs)
+}
+
+func (t *PostController) GetPostByID(c *gin.Context) {
+	postID := c.Param("postID")
+	postDTO, err := t.postService.GetPostByID(c, postID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, postDTO)
 }
 
 func NewPostController(postService PostService) *PostController {
