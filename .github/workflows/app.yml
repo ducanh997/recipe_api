@@ -3,10 +3,7 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
-
+      - develop
 
 jobs:
   build:
@@ -32,7 +29,8 @@ jobs:
 
   deploy_dev:
     name: Deploy develop
-    needs: [build]
+    needs: [ build ]
+    if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-18.04
     steps:
       - name: Download artifact
@@ -51,9 +49,10 @@ jobs:
           source: recipe_api_dev/
           target: .
 
-  promote_prod:
-    name: Promote to production
-    needs: [deploy_dev]
+  deploy_prod:
+    name: Deploy production
+    needs: [ build ]
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-18.04
     steps:
       - name: Download artifact
