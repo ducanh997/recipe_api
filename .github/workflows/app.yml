@@ -3,11 +3,10 @@ on:
   push:
     branches:
       - master
-      - develop
   pull_request:
     branches:
       - master
-      - develop
+
 
 jobs:
   build:
@@ -28,18 +27,39 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: recipe-artifact
+          name: recipe_artifact
           path: bin/
 
-  deploy:
-    name: Deploy
+  deploy_dev:
+    name: Deploy develop
     needs: [build]
     runs-on: ubuntu-18.04
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
-          name: recipe-artifact
+          name: recipe_artifact
+          path: recipe_api_dev/
+
+      - name: Copy artifact to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: recipe_api_dev/
+          target: .
+
+  promote_prod:
+    name: Promote to production
+    needs: [deploy_dev]
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: recipe_artifact
           path: recipe_api/
 
       - name: Copy artifact to server
@@ -50,5 +70,4 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           source: recipe_api/
-          strip_components: 1
-          target: recipe_api/
+          target: .
