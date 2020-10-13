@@ -100,14 +100,3 @@ jobs:
           source: recipe_api/.env
           target: recipe_api/
           strip_components: 1
-
-      - name: Prepare api.ini
-        uses: falnyr/replace-env-vars-action@master
-        env:
-          ENV: prod
-          USERNAME: ${{ secrets.USERNAME }}
-          APP_ROOT: recipe_api/etc/template/api.ini
-        run:
-          ls -la
-        with:
-          filename: ./recipe_api/etc/template/api.ini
