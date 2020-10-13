@@ -80,5 +80,5 @@ jobs:
           port: ${{ secrets.PORT }}
           source: recipe_api/.env
           target: recipe_api/
-        shell:
-          - echo "$CONFIGS" >> .env
+        run: |
+          echo "$CONFIGS" >> .env
