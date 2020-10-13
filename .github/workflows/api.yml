@@ -49,11 +49,11 @@ jobs:
           source: recipe_api_dev/
           target: .
 
-      - name: Create config
+      - name: Prepare env config
         run: |
           echo "${{ secrets.CONFIGS_DEV }}" > recipe_api_dev/.env
 
-      - name: Copy config to server
+      - name: Copy env config to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -86,11 +86,11 @@ jobs:
           source: recipe_api/
           target: .
 
-      - name: Create config
+      - name: Prepare env config
         run: |
           echo "${{ secrets.CONFIGS }}" > recipe_api/.env
 
-      - name: Copy config to server
+      - name: Copy env config to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -100,3 +100,10 @@ jobs:
           source: recipe_api/.env
           target: recipe_api/
           strip_components: 1
+
+      - name: Prepare api.ini
+        uses: falnyr/replace-env-vars-action@master
+        env:
+          ENV: prod
+          USERNAME: ${{ secrets.USERNAME }}
+          APP_ROOT: /recipe_api/etc/template/api.ini
