@@ -107,5 +107,7 @@ jobs:
           ENV: prod
           USERNAME: ${{ secrets.USERNAME }}
           APP_ROOT: recipe_api/etc/template/api.ini
+        run:
+          ls -la
         with:
           filename: ./recipe_api/etc/template/api.ini
