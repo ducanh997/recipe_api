@@ -71,9 +71,9 @@ jobs:
           source: recipe_api/
           target: .
 
-      - name: Create config file
+      - name: Create config
         run: |
-          echo "$CONFIGS" >> .env
+          echo "${CONFIGS}" >> .env
 
       - name: Copy config to server
         uses: appleboy/scp-action@master
