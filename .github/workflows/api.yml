@@ -106,6 +106,6 @@ jobs:
         env:
           ENV: prod
           USERNAME: ${{ secrets.USERNAME }}
-          APP_ROOT: /recipe_api/etc/template/api.ini
+          APP_ROOT: recipe_api/etc/template/api.ini
         with:
-          filename: /recipe_api/etc/template/api.ini
+          filename: recipe_api/etc/template/api.ini
