@@ -49,6 +49,21 @@ jobs:
           source: recipe_api_dev/
           target: .
 
+      - name: Create config
+        run: |
+          echo "${{ secrets.CONFIGS_DEV }}" > recipe_api_dev/.env
+
+      - name: Copy config to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: recipe_api_dev/.env
+          target: recipe_api_dev/
+          strip_components: 1
+
   deploy_prod:
     name: Deploy production
     needs: [ build ]
