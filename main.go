@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"
+	"os"
 	"recipe_api/common/db"
 	"recipe_api/controller"
 )
@@ -48,5 +50,5 @@ func main() {
 		}
 	}
 
-	router.Run()
+	router.Run(fmt.Sprintf(":%s", os.Getenv("APP_PORT")))
 }
