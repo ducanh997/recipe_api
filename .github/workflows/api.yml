@@ -24,7 +24,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: recipe_artifact
+          name: artifact
           path: bin/
 
   deploy_dev:
@@ -36,7 +36,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
-          name: recipe_artifact
+          name: artifact
           path: recipe_api_dev/
 
       - name: Copy artifact to server
@@ -72,12 +72,13 @@ jobs:
     steps:
       - name: Check out source code
         uses: actions/checkout@v1
+        path: recipe_api/
 
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
-          name: recipe_artifact
-          path: recipe_artifact/
+          name: artifact
+          path: recipe_api/bin/
 
       - name: Copy artifact to server
         uses: appleboy/scp-action@master
@@ -86,9 +87,8 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: recipe_artifact/
-          strip_components: 1
-          target: recipe/
+          source: recipe_api/bin/
+          target: .
 
       - name: Prepare env config
         run: |
@@ -102,5 +102,4 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           source: recipe_api/.env
-          target: recipe_api/
-          strip_components: 1
+          target: .
