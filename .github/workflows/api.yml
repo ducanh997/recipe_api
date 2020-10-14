@@ -18,8 +18,8 @@ jobs:
       - name: Check out source code
         uses: actions/checkout@v1
 
-      - name: Build
-        run: go build -o bin/recipe
+      - name: Build api
+        run: go build -o bin/api
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
