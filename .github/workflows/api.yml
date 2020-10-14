@@ -64,17 +64,20 @@ jobs:
           target: recipe_api_dev/
           strip_components: 1
 
-  deploy_prod:
+  deploy:
     name: Deploy production
     needs: [ build ]
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-18.04
     steps:
+      - name: Check out source code
+        uses: actions/checkout@v1
+
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
           name: recipe_artifact
-          path: recipe_api/
+          path: recipe_artifact/
 
       - name: Copy artifact to server
         uses: appleboy/scp-action@master
@@ -83,8 +86,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: recipe_api/
-          target: .
+          source: recipe_artifact/
+          strip_components: 1
+          target: recipe/
 
       - name: Prepare env config
         run: |
