@@ -72,7 +72,8 @@ jobs:
     steps:
       - name: Check out source code
         uses: actions/checkout@v1
-        path: recipe_api/
+        with:
+          path: recipe_api/
 
       - name: Download artifact
         uses: actions/download-artifact@v2
