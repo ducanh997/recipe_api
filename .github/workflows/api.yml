@@ -80,4 +80,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
-          script: supervisorctl restart recipe_api
+          script: sudo supervisorctl restart recipe_api
