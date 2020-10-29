@@ -1,0 +1,36 @@
+name: Nginx workflow
+on:
+  push:
+    paths:
+      - 'etc/nginx/**'
+      - '.github/workflows/nginx.yml'
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Apply nginx config
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v1
+
+      - name: Copy nginx config to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          source: etc/nginx/recipe_api.conf
+          strip_components: 2
+          target: /etc/nginx/sites-enabled/
+
+      - name: Reload nginx
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: sudo service nginx reload

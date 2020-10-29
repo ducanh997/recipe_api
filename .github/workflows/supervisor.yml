@@ -1,0 +1,39 @@
+name: Supervisor workflow
+on:
+  push:
+    paths:
+      - 'etc/supervisor/**'
+      - '.github/workflows/supervisor.yml'
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Apply supervisor config
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v1
+
+      - name: Print supervisor config
+        run: cat etc/supervisor/recipe_api.conf
+
+      - name: Copy supervisor config to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          source: etc/supervisor/recipe_api.conf
+          strip_components: 2
+          target: /etc/supervisor/conf.d/
+
+      - name: Reread and update supervisor config
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: sudo supervisorctl reread && sudo supervisorctl update
